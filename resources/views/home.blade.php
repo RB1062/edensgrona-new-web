@@ -1,139 +1,21 @@
 @extends('layouts.app')
 
 @section('title', 'Edens Gröna - Hem')
+
 @push('styles')
-    <style>
-        .hero-section {
-            position: relative;
-            width: 100%;
-            height: 85vh;
-            min-height: 600px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translateX(-50%) translateY(-50%);
-            z-index: 0;
-        }
-
-        .hero-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translateX(-50%) translateY(-50%);
-            object-fit: cover;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.3) 0%,
-                rgba(0, 0, 0, 0.5) 100%
-            );
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            padding: 2rem 0;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 700;
-            line-height: 1.2;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.75rem;
-            font-weight: 400;
-            line-height: 1.6;
-            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
-            opacity: 0.95;
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero-section {
-                min-height: 500px;
-            }
-
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.25rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-        }
-
-        /* Ensure video covers properly on all devices */
-        @media (max-aspect-ratio: 16/9) {
-            .hero-video {
-                width: auto;
-                height: 100%;
-            }
-        }
-
-        @media (min-aspect-ratio: 16/9) {
-            .hero-video {
-                width: 100%;
-                height: auto;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
 @endpush
 
 @section('content')
+    {{-- HERO SECTION --}}
     @if($heroSettings->is_active)
         <section class="hero-section">
             <!-- Background Video -->
             <div class="video-container">
                 <video autoplay muted loop playsinline class="hero-video">
-                    <source src="{{ asset('storage/'.$heroSettings->background_video_path) }}" type="video/mp4">
+                    <source
+                        src="{{ asset('storage/'.$heroSettings->background_video_path) }}"
+                        type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -142,207 +24,286 @@
             <div class="hero-overlay"></div>
 
             <!-- Content -->
-            {{--<div class="hero-content">
+            <div class="hero-content">
                 <div class="container">
                     <div class="row justify-content-center text-center">
                         <div class="col-lg-10">
-                            @if($hero->title)
-                                <h1 class="hero-title text-white mb-4" data-aos="fade-up">
-                                    {{ $hero->title }}
-                                </h1>
-                            @endif
+                            <div class="hero-badge animate-fade-in-up">
+                                🌿 Professionell Trädgårdstjänst
+                            </div>
 
-                            @if($hero->subtitle)
-                                <p class="hero-subtitle text-white" data-aos="fade-up" data-aos-delay="100">
-                                    {{ $hero->subtitle }}
-                                </p>
-                            @endif
+                            <h1 class="hero-title text-white animate-fade-in-up" style="animation-delay: 0.1s;">
+                                Din Drömträdgård<br>Börjar Här
+                            </h1>
+
+                            <p class="hero-subtitle text-white animate-fade-in-up" style="animation-delay: 0.2s;">
+                                Vi skapar gröna oaser med passion, kunskap och kvalitet.
+                                Från design till underhåll – vi tar hand om allt.
+                            </p>
+
+                            <div class="hero-cta animate-fade-in-up" style="animation-delay: 0.3s;">
+                                <a href="{{ route('contact') }}" class="btn-hero-primary">
+                                    Få Kostnadsfri Offert
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                                <a href="#services" class="btn-hero-secondary">
+                                    Våra Tjänster
+                                    <i class="fas fa-chevron-down ms-2"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>--}}
+            </div>
         </section>
     @endif
 
-    {{-- Service cards - DYNAMIC --}}
-    <div class="container content-space-1">
-        <!-- Tags -->
-        <div class="proje-msj mb-6">
-            <h2 class="text-center">
+    {{-- SERVICES SECTION --}}
+    <div class="container content-space-2 content-space-lg-3" id="services">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">Våra Tjänster</span>
+            <h2 class="section-title">
                 Vilken trädgårdstjänst söker du?
             </h2>
-            <p class="text-center">
+            <p class="section-subtitle">
                 Vi erbjuder ett omfattande utbud av tjänster som hjälper dig att förverkliga din drömträdgård.
-                <br>
-                🌿Stora och små projekt
+                Stora och små projekt – vi tar oss an allt med samma engagemang.
             </p>
         </div>
 
-        <div class="row" id="card-1">
+        <div class="row g-4">
             @forelse($services as $index => $service)
-                <div class="order-lg-0 col-sm-6 col-lg-4 mb-3 mb-sm-7 home-article-card" id="card{{ $index + 1 }}">
-                    <!-- Card -->
-                    <a class="card card-stretched-vertical card-transition service-card-hover"
+                <div class="col-sm-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                    <a class="card card-stretched-vertical service-card-hover d-flex flex-column"
                        href="#!"
                        style="background-image: url({{ $service->hasMedia('image') ? $service->image_url : asset('assets/img/default-service.jpg') }});
-                          min-height: 25rem;
-                          background-position: center;
-                          background-size: cover;
-                          position: relative;
-                          overflow: hidden;">
+                              min-height: 28rem;
+                              background-position: center;
+                              background-size: cover;
+                              position: relative;">
 
-                        <!-- Enhanced Overlay -->
                         <div class="service-card-overlay"></div>
 
-                        <div class="card-footer"
-                             style="position: relative; z-index: 2; bottom: 0; top: auto; margin-top: auto;">
+                        <div class="card-footer mt-auto">
                             @if($service->icon)
-                                <i class="{{ $service->icon }} text-white mb-2" style="font-size: 2rem;"></i>
+                                <i class="{{ $service->icon }} text-white service-icon"></i>
                             @endif
-                            <h3 class="card-title text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                            <h3 class="card-title text-white mb-2">
                                 {{ $service->title }}
                             </h3>
                             @if($service->description)
-                                <p class="text-white small d-none d-lg-block"
-                                   style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">
-                                    {{ Str::limit($service->description, 80) }}
+                                <p class="text-white small mb-0 card-text">
+                                    {{ Str::limit($service->description, 100) }}
                                 </p>
                             @endif
                         </div>
                     </a>
-                    <!-- End Card -->
                 </div>
-                <!-- End Col -->
             @empty
                 <div class="col-12 text-center">
                     <p class="text-muted">Inga tjänster tillgängliga för tillfället.</p>
                 </div>
             @endforelse
         </div>
-        <!-- End Row -->
     </div>
 
-    {{-- Process Steps Section --}}
-    <div class="position-relative bg-dark"
-         style="background-image: url({{ asset('assets/img/wave-pattern-light.svg') }});">
-        <div class="container text-center content-space-3">
-            <div class="proje-msj mt-4 mb-5">
-                <div class="text-center mx-md-auto mb-md-9">
-                    <h2 class="text-white">Så här går det till – Enkel och smidig process för din drömträdgård</h2>
-                    <span class="text-white-70">Vi förstår vikten av att snabbt förverkliga dina trädgårds idéer. Därför erbjuder vi en effektiv och smidig process – från första kontakt till färdigt resultat. Så här går det till</span>
-                </div>
+    {{-- PROCESS STEPS SECTION --}}
+    <div class="position-relative"
+         style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 5rem 0;">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Vår Process</span>
+                <h2 class="section-title text-white">
+                    Så här går det till
+                </h2>
+                <p class="section-subtitle text-white">
+                    En enkel och smidig process från första kontakt till färdigt resultat.
+                    Vi guidar dig genom varje steg på vägen.
+                </p>
             </div>
 
-            <!-- Dynamic Process Steps -->
-            <div class="container content-space-1 content-space-lg-1">
-                <div class="row justify-content-lg-center align-items-stretch">
-                    @foreach($steps as $step)
-                        <div class="col-md-6 col-lg-5 mb-3 mb-md-7">
-                            <!-- Icon Blocks -->
-                            <div class="card p-3 h-100">
-                                <div class="d-flex pe-lg-5 text-start" data-aos="fade-up"
-                                     data-aos-delay="{{ $step->step_number * 100 }}">
-                                    <div class="flex-shrink-0">
-                                        <span class="svg-icon text-primary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
-                                                 viewBox="0 0 50 50">
-                                                <text x="10" y="40" font-family="Arial" font-size="40"
-                                                      fill="green">{{ $step->step_number }}</text>
-                                            </svg>
-                                        </span>
-                                    </div>
-                                    <div class="flex-grow-1 ms-4">
-                                        <h4>{{ $step->title }}</h4>
-                                        <p>{{ $step->description }}</p>
+            <div class="row g-4 justify-content-center">
+                @foreach($steps as $step)
+                    <div class="col-md-6 col-lg-6" data-aos="fade-up" data-aos-delay="{{ $step->step_number * 100 }}">
+                        <div class="process-card">
+                            <div class="d-flex align-items-start gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="process-number">
+                                        {{ $step->step_number }}
                                     </div>
                                 </div>
+                                <div class="flex-grow-1">
+                                    <h4 class="process-title">{{ $step->title }}</h4>
+                                    <p class="process-description mb-0">{{ $step->description }}</p>
+                                </div>
                             </div>
-                            <!-- End Icon Blocks -->
                         </div>
-
-                        @if($loop->iteration % 2 == 0 && !$loop->last)
-                            <div class="w-100"></div>
-                        @endif
-                    @endforeach
-                </div>
-                <!-- End Row -->
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
 
-    <!-- Feature Stats -->
-    <div class="container mt-10">
-        <div class="row justify-content-lg-center home-article p-3">
-            <div class="col-sm-4 col-lg-3 mb-4 mb-sm-0">
-                <div class="text-center home-article-card"
-                     style="box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.559); padding: 9px; background-color: var(--mygreen); border-radius: 8px;">
-                    <h2 class="display-4">
-                        <i class="far fa-heart white"></i>
-                    </h2>
-                    <h3 class="f-color white">Kärlek</h3>
+    {{-- FEATURE STATS --}}
+    <div class="container content-space-2 content-space-lg-3">
+        <div class="row g-4 justify-content-center" data-aos="fade-up">
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-stat-card text-center">
+                    <div class="feature-icon">
+                        <i class="far fa-heart text-white"></i>
+                    </div>
+                    <h3 class="feature-title text-white">Kärlek</h3>
+                    <p class="text-white mb-0 mt-2">Vi älskar det vi gör</p>
                 </div>
             </div>
 
-            <!-- End Col -->
-            <div class="col-sm-4 col-lg-3 mb-4">
-                <div class="text-center home-article-card"
-                     style="box-shadow: 1px 1px 3px 0px var(--mygreen); padding: 9px; background-color: var(--mygreen); border-radius: 8px;">
-                    <h2 class="display-4">
-                        <i class="fa-solid fa-book white fa-md mb-1"></i>
-                    </h2>
-                    <h3 class="white">Kunskap</h3>
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-stat-card text-center">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-book text-white"></i>
+                    </div>
+                    <h3 class="feature-title text-white">Kunskap</h3>
+                    <p class="text-white mb-0 mt-2">Expertis och erfarenhet</p>
                 </div>
             </div>
-            <!-- End Col -->
-            <div class="col-sm-4 col-lg-3">
-                <div class="text-center home-article-card"
-                     style="box-shadow: 1px 2px 5px 0px var(--mygreen); padding: 9px; background-color: var(--mygreen); border-radius: 8px;">
-                    <h2 class="display-4 counter">
-                        <i class="fa-solid fa-medal white fa-md mb-1"></i>
-                    </h2>
-                    <h3 class="f-color white">Kvalitet</h3>
+
+            <div class="col-sm-6 col-lg-4">
+                <div class="feature-stat-card text-center">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-medal text-white"></i>
+                    </div>
+                    <h3 class="feature-title text-white">Kvalitet</h3>
+                    <p class="text-white mb-0 mt-2">Högsta standard alltid</p>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Feature Stats -->
 
-    <!--video slider-->
-    <div class="container text-center content-space-lg-1" id="videos">
-        <div class="proje-msj mt-4 mb-5">
-            <h2 class="text-center">
-                Din blivande trädgårdsmästare
-                <br>
-                Vi fixar din trädgård till perfektion
-            </h2>
+    {{-- VIDEO GALLERY - SCROLLABLE THUMBNAILS --}}
+    <div class="video-gallery-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Vårt Arbete</span>
+                <h2 class="section-title">
+                    Din blivande trädgårdsmästare
+                </h2>
+                <p class="section-subtitle">
+                    Vi fixar din trädgård till perfektion. Se exempel på våra tidigare projekt.
+                </p>
+            </div>
+
+            <div class="video-gallery-container" data-aos="zoom-in">
+                <!-- Main Video -->
+                <div class="main-video-wrapper">
+                    <video id="mainVideo" class="main-video" autoplay muted loop playsinline>
+                        <source src="{{ asset('assets/video/slide-4.mp4') }}" type="video/mp4">
+                    </video>
+                </div>
+
+                <!-- Video Thumbnails - Scrollable after 3 items -->
+                <div class="video-thumbnails">
+                    <div class="video-thumbnail active"
+                         onclick="changeVideo('{{ asset('assets/video/slide-4.mp4') }}', 0)" data-index="0">
+                        <div class="video-number">1</div>
+                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                            <source src="{{ asset('assets/video/slide-4.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="video-thumbnail-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-2.mp4') }}', 1)"
+                         data-index="1">
+                        <div class="video-number">2</div>
+                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                            <source src="{{ asset('assets/video/slide-2.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="video-thumbnail-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-1.mp4') }}', 2)"
+                         data-index="2">
+                        <div class="video-number">3</div>
+                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                            <source src="{{ asset('assets/video/slide-1.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="video-thumbnail-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-5.mp4') }}', 3)"
+                         data-index="3">
+                        <div class="video-number">4</div>
+                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                            <source src="{{ asset('assets/video/slide-5.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="video-thumbnail-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-3.mp4') }}', 4)"
+                         data-index="4">
+                        <div class="video-number">5</div>
+                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                            <source src="{{ asset('assets/video/slide-3.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="video-thumbnail-overlay">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <section class="video-slid mb-7">
-            <video id="slider" autoplay muted loop>
-                <source src="{{ asset('assets/video/slide-3.mp4') }}" type="video/mp4">
-            </video>
-            <ul class="list-inline d-block navigation">
-                <li onclick="videoUrl('{{ asset('assets/video/slide-4.mp4') }}')" class="white">
-                    <i class="fa-solid fa-1"></i>
-                </li>
-                <li onclick="videoUrl('{{ asset('assets/video/slide-2.mp4') }}')" class="white">
-                    <i class="fa-solid fa-2"></i>
-                </li>
-                <li onclick="videoUrl('{{ asset('assets/video/slide-1.mp4') }}')" class="white">
-                    <i class="fa-solid fa-3"></i>
-                </li>
-                <li onclick="videoUrl('{{ asset('assets/video/slide-5.mp4') }}')" class="white">
-                    <i class="fa-solid fa-4"></i>
-                </li>
-            </ul>
-        </section>
     </div>
 
 @endsection
 
 @push('scripts')
-    <script type="text/javascript">
-        function videoUrl(hmmm) {
-            document.getElementById("slider").src = hmmm;
+    <script>
+        // Video gallery with thumbnails
+        function changeVideo(videoSrc, index) {
+            const mainVideo = document.getElementById("mainVideo");
+            mainVideo.src = videoSrc;
+            mainVideo.load();
+            mainVideo.play();
+
+            // Update active state
+            document.querySelectorAll('.video-thumbnail').forEach((thumb, i) => {
+                if (i === index) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
         }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
 @endpush
