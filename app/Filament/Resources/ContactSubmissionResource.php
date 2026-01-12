@@ -19,7 +19,7 @@ class ContactSubmissionResource extends Resource
     protected static ?string $navigationLabel = 'Contact Submissions';
     protected static ?string $modelLabel = 'Contact Submission';
     protected static ?string $pluralModelLabel = 'Contact Submissions';
-    protected static ?string $navigationGroup = 'Content';
+    protected static ?string $navigationGroup = 'Contact';
     protected static ?int $navigationSort = 1;
 
     public static function getNavigationBadge(): ?string

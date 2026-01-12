@@ -25,7 +25,7 @@ class ManageHeroSettings extends SettingsPage
     {
         return $form
             ->schema([
-                /*Forms\Components\Section::make('Hero Content')
+                Forms\Components\Section::make('Hero Content')
                                         ->description('Manage the main hero section content')
                                         ->icon('heroicon-o-document-text')
                                         ->schema([
@@ -53,7 +53,7 @@ class ManageHeroSettings extends SettingsPage
                                                                    ->default(true)
                                                                    ->helperText('Toggle to show/hide the hero section on the homepage')
                                                                    ->columnSpanFull(),
-                                        ]),*/
+                                        ]),
 
                 Forms\Components\Section::make('Media')
                                         ->description('Upload hero section media files')
@@ -102,7 +102,7 @@ class ManageHeroSettings extends SettingsPage
                                                                        ->columnSpanFull(),
                                         ]),
 
-                /*Forms\Components\Section::make('Primary Button')
+                Forms\Components\Section::make('Primary Button')
                                         ->description('Main call-to-action button')
                                         ->icon('heroicon-o-cursor-arrow-rays')
                                         ->schema([
@@ -140,7 +140,7 @@ class ManageHeroSettings extends SettingsPage
                                                                       ->columnSpan(1),
                                         ])
                                         ->columns(2)
-                                        ->collapsible(),*/
+                                        ->collapsible(),
             ]);
     }
 }

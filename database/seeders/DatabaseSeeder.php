@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             ProcessStepSeeder::class,
             HeroSettingsSeeder::class,
+            VideoSeeder::class
         ]);
     }
 }

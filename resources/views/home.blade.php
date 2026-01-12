@@ -28,26 +28,29 @@
                 <div class="container">
                     <div class="row justify-content-center text-center">
                         <div class="col-lg-10">
-                            <div class="hero-badge animate-fade-in-up">
-                                🌿 Professionell Trädgårdstjänst
-                            </div>
+                            @if($heroSettings->subtitle)
+                                <div class="hero-badge animate-fade-in-up">
+                                    {{$heroSettings->subtitle}}
+                                </div>
+                            @endif
 
-                            <h1 class="hero-title text-white animate-fade-in-up" style="animation-delay: 0.1s;">
-                                Din Drömträdgård<br>Börjar Här
-                            </h1>
-
-                            <p class="hero-subtitle text-white animate-fade-in-up" style="animation-delay: 0.2s;">
-                                Vi skapar gröna oaser med passion, kunskap och kvalitet.
-                                Från design till underhåll – vi tar hand om allt.
-                            </p>
+                            @if($heroSettings->title)
+                                <h1 class="hero-title text-white animate-fade-in-up" style="animation-delay: 0.1s;">
+                                    {{$heroSettings->title}}
+                                </h1>
+                            @endif
+                            @if($heroSettings->description)
+                                <p class="hero-subtitle text-white animate-fade-in-up"
+                                   style="animation-delay: 0.2s;">{{$heroSettings->description}}</p>
+                            @endif
 
                             <div class="hero-cta animate-fade-in-up" style="animation-delay: 0.3s;">
-                                <a href="{{ route('contact') }}" class="btn-hero-primary">
-                                    Få Kostnadsfri Offert
+                                <a href="{{$heroSettings->primary_button_url}}" class="btn-hero-primary">
+                                    {{$heroSettings->primary_button_text}}
                                     <i class="fas fa-arrow-right ms-2"></i>
                                 </a>
                                 <a href="#services" class="btn-hero-secondary">
-                                    Våra Tjänster
+                                    {{$heroSettings->secondary_button_text}}
                                     <i class="fas fa-chevron-down ms-2"></i>
                                 </a>
                             </div>
@@ -179,7 +182,7 @@
         </div>
     </div>
 
-    {{-- VIDEO GALLERY - SCROLLABLE THUMBNAILS --}}
+    {{-- VIDEO GALLERY - DYNAMIC WITH TITLES --}}
     <div class="video-gallery-section">
         <div class="container">
             <div class="section-header" data-aos="fade-up">
@@ -192,82 +195,51 @@
                 </p>
             </div>
 
-            <div class="video-gallery-container" data-aos="zoom-in">
-                <!-- Main Video -->
-                <div class="main-video-wrapper">
-                    <video id="mainVideo" class="main-video" autoplay muted loop playsinline>
-                        <source src="{{ asset('assets/video/slide-4.mp4') }}" type="video/mp4">
-                    </video>
-                </div>
-
-                <!-- Video Thumbnails - Scrollable after 3 items -->
-                <div class="video-thumbnails">
-                    <div class="video-thumbnail active"
-                         onclick="changeVideo('{{ asset('assets/video/slide-4.mp4') }}', 0)" data-index="0">
-                        <div class="video-number">1</div>
-                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-                            <source src="{{ asset('assets/video/slide-4.mp4') }}" type="video/mp4">
+            @if($videos->count() > 0)
+                <div class="video-gallery-container" data-aos="zoom-in">
+                    <!-- Main Video -->
+                    <div class="main-video-wrapper">
+                        <video id="mainVideo" class="main-video" autoplay muted loop playsinline>
+                            <source src="{{ $videos->first()->video_url }}" type="video/mp4">
                         </video>
-                        <div class="video-thumbnail-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-2.mp4') }}', 1)"
-                         data-index="1">
-                        <div class="video-number">2</div>
-                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-                            <source src="{{ asset('assets/video/slide-2.mp4') }}" type="video/mp4">
-                        </video>
-                        <div class="video-thumbnail-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Video Thumbnails - Scrollable after 3 items -->
+                    <div class="video-thumbnails">
+                        @foreach($videos as $index => $video)
+                            <div class="video-thumbnail {{ $index === 0 ? 'active' : '' }}"
+                                 onclick="changeVideo('{{ $video->video_url }}', {{ $index }})"
+                                 data-index="{{ $index }}">
+                                <div class="video-number">{{ $index + 1 }}</div>
 
-                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-1.mp4') }}', 2)"
-                         data-index="2">
-                        <div class="video-number">3</div>
-                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-                            <source src="{{ asset('assets/video/slide-1.mp4') }}" type="video/mp4">
-                        </video>
-                        <div class="video-thumbnail-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </div>
+                                @if($video->hasThumbnail())
+                                    <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}">
+                                @else
+                                    <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+                                        <source src="{{ $video->video_url }}" type="video/mp4">
+                                    </video>
+                                @endif
 
-                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-5.mp4') }}', 3)"
-                         data-index="3">
-                        <div class="video-number">4</div>
-                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-                            <source src="{{ asset('assets/video/slide-5.mp4') }}" type="video/mp4">
-                        </video>
-                        <div class="video-thumbnail-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
-                            </div>
-                        </div>
-                    </div>
+                                <div class="video-thumbnail-overlay">
+                                    <div class="play-icon">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                </div>
 
-                    <div class="video-thumbnail" onclick="changeVideo('{{ asset('assets/video/slide-3.mp4') }}', 4)"
-                         data-index="4">
-                        <div class="video-number">5</div>
-                        <video style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-                            <source src="{{ asset('assets/video/slide-3.mp4') }}" type="video/mp4">
-                        </video>
-                        <div class="video-thumbnail-overlay">
-                            <div class="play-icon">
-                                <i class="fas fa-play"></i>
+                                <!-- Video Title -->
+                                <div class="video-title-overlay">
+                                    <span class="video-title-text">{{ $video->title }}</span>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="text-center py-5">
+                    <i class="fas fa-video fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Inga videos tillgängliga för tillfället.</p>
+                </div>
+            @endif
         </div>
     </div>
 

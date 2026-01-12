@@ -7,6 +7,7 @@ use App\Mail\ContactSubmissionMail;
 use App\Models\ContactSubmission;
 use App\Models\ProcessStep;
 use App\Models\Service;
+use App\Models\Video;
 use App\Settings\AboutSettings;
 use App\Settings\ContactSettings;
 use App\Settings\GeneralSettings;
@@ -27,10 +28,15 @@ class HomeController extends Controller
 
         $steps = ProcessStep::where('is_active', true)->orderBy('step_number')->get();
 
+        $videos = Video::active()
+                       ->ordered()
+                       ->get();
+
         return view('home', [
             'services' => $services,
             'steps' => $steps,
             'heroSettings' => $heroSettings,
+            'videos' => $videos,
         ]);
     }
 
@@ -85,45 +91,45 @@ class HomeController extends Controller
         }
 
 //        try {
-            $submission = ContactSubmission::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'postal_code' => $request->postal_code,
-                'customer_type' => $request->customer_type,
-                'help_needed' => $request->help_needed,
-                'measurements' => $request->measurements,
+        $submission = ContactSubmission::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'city' => $request->city,
+            'postal_code' => $request->postal_code,
+            'customer_type' => $request->customer_type,
+            'help_needed' => $request->help_needed,
+            'measurements' => $request->measurements,
 //                'message' => $request->message,
-                'status' => 'new',
-            ]);
+            'status' => 'new',
+        ]);
 
-            // Handle file attachments
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    try {
-                        $submission->addMedia($file)
-                                   ->preservingOriginal()
-                                   ->toMediaCollection('attachments');
+        // Handle file attachments
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                try {
+                    $submission->addMedia($file)
+                               ->preservingOriginal()
+                               ->toMediaCollection('attachments');
 
-                        Log::info('File uploaded successfully', [
-                            'submission_id' => $submission->id,
-                            'file_name' => $file->getClientOriginalName(),
-                        ]);
-                    } catch (\Exception $e) {
-                        Log::error('Failed to upload attachment', [
-                            'error' => $e->getMessage(),
-                            'file' => $file->getClientOriginalName(),
-                        ]);
-                    }
+                    Log::info('File uploaded successfully', [
+                        'submission_id' => $submission->id,
+                        'file_name' => $file->getClientOriginalName(),
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to upload attachment', [
+                        'error' => $e->getMessage(),
+                        'file' => $file->getClientOriginalName(),
+                    ]);
                 }
             }
+        }
 
         // Send email to admin
         try {
-            Mail::to(env('ADMIN_EMAIL','edensgrona@gmail.com'))
+            Mail::to(env('ADMIN_EMAIL', 'edensgrona@gmail.com'))
                 ->send(new ContactSubmissionMail($submission));
 
         } catch (\Exception $e) {
@@ -145,9 +151,9 @@ class HomeController extends Controller
             ]);
         }
 
-            return redirect()->back()->with('success', 'Tack för ditt meddelande! Vi hör av oss inom kort.');
+        return redirect()->back()->with('success', 'Tack för ditt meddelande! Vi hör av oss inom kort.');
 
-        } /*catch (\Exception $e) {
+    } /*catch (\Exception $e) {
             Log::error('Failed to save contact submission', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
