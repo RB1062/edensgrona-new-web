@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactConfirmationMail;
+use App\Mail\ContactSubmissionMail;
 use App\Models\AboutContent;
 use App\Models\ContactInfo;
 use App\Models\ContactSubmission;
@@ -15,6 +17,7 @@ use App\Settings\GeneralSettings;
 use App\Settings\HeroSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -121,6 +124,30 @@ class HomeController extends Controller
                     }
                 }
             }
+
+        // Send email to admin
+        try {
+            Mail::to(env('ADMIN_EMAIL','edensgrona@gmail.com'))
+                ->send(new ContactSubmissionMail($submission));
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send admin email', [
+                'error' => $e->getMessage(),
+                'submission_id' => $submission->id,
+            ]);
+        }
+
+        // Send confirmation email to customer
+        try {
+            Mail::to($submission->email)
+                ->send(new ContactConfirmationMail($submission));
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send customer confirmation email', [
+                'error' => $e->getMessage(),
+                'submission_id' => $submission->id,
+            ]);
+        }
 
             return redirect()->back()->with('success', 'Tack för ditt meddelande! Vi hör av oss inom kort.');
 
