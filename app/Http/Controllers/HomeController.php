@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactConfirmationMail;
 use App\Mail\ContactSubmissionMail;
-use App\Models\AboutContent;
-use App\Models\ContactInfo;
 use App\Models\ContactSubmission;
-use App\Models\HeroSection;
 use App\Models\ProcessStep;
 use App\Models\Service;
-use App\Models\Setting;
 use App\Settings\AboutSettings;
 use App\Settings\ContactSettings;
 use App\Settings\GeneralSettings;
@@ -64,7 +60,7 @@ class HomeController extends Controller
             'customer_type' => 'required|in:private,company',
             'help_needed' => 'required|string',
             'measurements' => 'nullable|string',
-            'message' => 'nullable|string',
+//            'message' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
@@ -100,7 +96,7 @@ class HomeController extends Controller
                 'customer_type' => $request->customer_type,
                 'help_needed' => $request->help_needed,
                 'measurements' => $request->measurements,
-                'message' => $request->message,
+//                'message' => $request->message,
                 'status' => 'new',
             ]);
 

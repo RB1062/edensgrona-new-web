@@ -301,22 +301,6 @@
                         @enderror
                     </div>
 
-                    <!-- Additional Message -->
-                    <div class="mb-4">
-                        <label for="message" class="form-label">Ytterligare meddelande (valfritt)</label>
-                        <textarea
-                            class="form-control @error('message') is-invalid @enderror"
-                            id="message"
-                            name="message"
-                            rows="3"
-                            placeholder="Finns det något mer du vill berätta?"
-                            style="padding: 12px; border-radius: 8px;"
-                        >{{ old('message') }}</textarea>
-                        @error('message')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
                     <!-- File Upload -->
                     <div class="mb-5">
                         <label class="form-label">Om du vill kan du bifoga bilder här</label>
