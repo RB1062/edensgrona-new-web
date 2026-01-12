@@ -133,7 +133,7 @@
             <!-- Background Video -->
             <div class="video-container">
                 <video autoplay muted loop playsinline class="hero-video">
-                    <source src="{{ $heroSettings->background_video_path }}" type="video/mp4">
+                    <source src="{{ asset($heroSettings->background_video_path) }}" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
