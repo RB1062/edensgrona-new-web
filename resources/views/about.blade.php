@@ -39,7 +39,7 @@
                         <img src="{{ Storage::url($aboutSettings->image_path) }}"
                              alt="{{ $aboutSettings->title }}"
                              class="card-img-top"
-                             style="height: auto; object-fit: cover;">
+                             style="height: 100%; object-fit: cover;">
                     @else
                         <img src="/assets/img/about-us-image.jpeg"
                              alt="Edensgrona"
