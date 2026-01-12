@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements HasMedia, FilamentUser
 {
-    use HasFactory, Notifiable, InteractsWithMedia;
+    use HasFactory;
+    use Notifiable;
+    use InteractsWithMedia;
 
+    /**
+     * Mass assignable attributes.
+     */
     protected $fillable = [
         'name',
         'email',
@@ -23,11 +30,17 @@ class User extends Authenticatable implements HasMedia
         'customer_type',
     ];
 
+    /**
+     * Hidden attributes for serialization.
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    /**
+     * Attribute casting.
+     */
     protected function casts(): array
     {
         return [
@@ -37,17 +50,34 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Register media collections
+     * Filament v3: control who can access the admin panel.
+     *
+     * NOTE: This currently allows ALL authenticated users.
+     * If you want admin-only access, add a column (e.g. is_admin)
+     * and change this method accordingly.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return auth()->user()->email === 'admin@edensgrona.se';
+    }
+
+    /**
+     * Media Library: register media collections.
      */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
              ->singleFile()
-             ->acceptsMimeTypes(['image/jpeg', 'image/jpg', 'image/png']);
+             ->acceptsMimeTypes([
+                 'image/jpeg',
+                 'image/jpg',
+                 'image/png',
+                 'image/webp',
+             ]);
     }
 
     /**
-     * Register media conversions
+     * Media Library: register media conversions.
      */
     public function registerMediaConversions($media = null): void
     {
@@ -59,28 +89,25 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Get avatar URL
+     * Accessor: avatar thumbnail URL.
      */
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->getFirstMediaUrl('avatar', 'thumb') ?: null;
+        $url = $this->getFirstMediaUrl('avatar', 'thumb');
+
+        return $url !== '' ? $url : null;
     }
 
     /**
-     * Relationships
+     * Relationships.
      */
     public function contactSubmissions()
     {
         return $this->hasMany(ContactSubmission::class);
     }
 
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
-    }
-
     /**
-     * Get full address
+     * Accessor: full address.
      */
     public function getFullAddressAttribute(): string
     {
@@ -94,16 +121,13 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * Check if user is private customer
+     * Helpers.
      */
     public function isPrivate(): bool
     {
         return $this->customer_type === 'private';
     }
 
-    /**
-     * Check if user is company
-     */
     public function isCompany(): bool
     {
         return $this->customer_type === 'company';
