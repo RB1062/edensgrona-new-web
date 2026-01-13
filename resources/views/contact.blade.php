@@ -13,8 +13,9 @@
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <h1 class="text-white mb-3" style="font-size: 3rem; font-weight: 700;">Kontakta oss!</h1>
-                    <p class="text-white mb-0" style="font-size: 1.25rem; opacity: 0.95;">Fyll i formuläret för att få
-                                                                                          en kostnadsfri offert</p>
+                    <p class="text-white mb-0" style="font-size: 1.25rem; opacity: 0.95;">
+                        Fyll i formuläret för ett kostnadsfritt besök och offert!
+                    </p>
                 </div>
                 <div class="col-lg-5 text-lg-end mt-4 mt-lg-0">
                     <a href="tel:{{$contactSettings->phone}}" class="btn btn-light btn-lg shadow-sm"
@@ -82,39 +83,23 @@
                     @csrf
 
                     <!-- Personal Information -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label for="first_name" class="form-label">Förnamn <span
-                                    class="text-danger">*</span></label>
+                    <div class="mb-4">
+                        <label for="name" class="form-label">Namn <span class="text-danger">*</span></label>
+                        <div class="input-group">
+        <span class="input-group-text" style="background-color: #f5f5f5; border-right: 0;">
+            <i class="fas fa-user" style="color: var(--mygreen);"></i>
+        </span>
                             <input
                                 type="text"
-                                class="form-control @error('first_name') is-invalid @enderror"
-                                id="first_name"
-                                name="first_name"
-                                value="{{ old('first_name') }}"
-                                placeholder="Förnamn"
+                                class="form-control @error('name') is-invalid @enderror"
+                                id="name"
+                                name="name"
+                                value="{{ old('name') }}"
+                                placeholder="För- och efternamn"
                                 required
-                                style="padding: 12px; border-radius: 8px;"
+                                style="padding: 12px; border-radius: 0 8px 8px 0; border-left: 0;"
                             >
-                            @error('first_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="last_name" class="form-label">Efternamn <span
-                                    class="text-danger">*</span></label>
-                            <input
-                                type="text"
-                                class="form-control @error('last_name') is-invalid @enderror"
-                                id="last_name"
-                                name="last_name"
-                                value="{{ old('last_name') }}"
-                                placeholder="Efternamn"
-                                required
-                                style="padding: 12px; border-radius: 8px;"
-                            >
-                            @error('last_name')
+                            @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

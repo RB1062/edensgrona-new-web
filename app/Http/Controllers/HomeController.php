@@ -56,8 +56,7 @@ class HomeController extends Controller
     public function submitContact(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -90,10 +89,15 @@ class HomeController extends Controller
                              ->withInput();
         }
 
+        // Split the name into first and last name
+        $nameParts = explode(' ', trim($request->name), 2);
+        $firstName = $nameParts[0];
+        $lastName = $nameParts[1] ?? '';
+
 //        try {
         $submission = ContactSubmission::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
             'email' => $request->email,
             'phone' => $request->phone,
             'address' => $request->address,
