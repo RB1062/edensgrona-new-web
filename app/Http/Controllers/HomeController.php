@@ -133,7 +133,7 @@ class HomeController extends Controller
 
         // Send email to admin
         try {
-            Mail::to(env('ADMIN_EMAIL', 'edensgrona@gmail.com'))
+            Mail::to(env('ADMIN_EMAIL', 'info@edensgrona.se'))
                 ->send(new ContactSubmissionMail($submission));
 
         } catch (\Exception $e) {
