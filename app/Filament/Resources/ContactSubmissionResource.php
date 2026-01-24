@@ -120,6 +120,12 @@ class ContactSubmissionResource extends Resource
                                                                                               ->columnSpanFull()
                                                                                               ->visible(fn($record
                                                                                               ) => $record && $record->message),
+
+                                                                     Forms\Components\Textarea::make('notes')
+                                                                                              ->label('Interna anteckningar')
+                                                                                              ->rows(4)
+                                                                                              ->placeholder('Lägg till anteckningar här...')
+                                                                                              ->columnSpanFull(),
                                                                  ])
                                                                  ->columnSpan(1),
 
@@ -161,7 +167,8 @@ class ContactSubmissionResource extends Resource
                                                                                                  ->openable()
                                                                                                  ->previewable()
                                                                                                  ->columnSpanFull()
-                                                                                                 ->visible(function ($record
+                                                                                                 ->visible(function (
+                                                                                                     $record
                                                                                                  ) {
                                                                                                      return $record && $record->hasMedia('attachments');
                                                                                                  }),

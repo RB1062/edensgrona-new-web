@@ -66,6 +66,7 @@ class HomeController extends Controller
             'help_needed' => 'required|string',
             'measurements' => 'nullable|string',
 //            'message' => 'nullable|string',
+            'visit_dates' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
@@ -94,6 +95,11 @@ class HomeController extends Controller
         $firstName = $nameParts[0];
         $lastName = $nameParts[1] ?? '';
 
+        // Prepare notes with visit dates
+        $notes = '';
+        if ($request->visit_dates) {
+            $notes = "Föreslagna besökstider:\n".$request->visit_dates;
+        }
 //        try {
         $submission = ContactSubmission::create([
             'first_name' => $firstName,
@@ -107,6 +113,7 @@ class HomeController extends Controller
             'help_needed' => $request->help_needed,
             'measurements' => $request->measurements,
 //                'message' => $request->message,
+            'notes' => $notes,
             'status' => 'new',
         ]);
 
@@ -155,17 +162,8 @@ class HomeController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Tack för ditt meddelande! Vi hör av oss inom kort.');
+        return redirect()->back()->with('success', 'Vi återkommer så snart som möjligt');
 
-    } /*catch (\Exception $e) {
-            Log::error('Failed to save contact submission', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return redirect()->back()
-                             ->with('error', 'Ett fel uppstod. Vänligen försök igen.')
-                             ->withInput();
-        }*/
-//    }
+    }
 }
+

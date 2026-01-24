@@ -35,7 +35,7 @@
                 <div class="d-flex align-items-center">
                     <i class="fas fa-check-circle fa-2x me-3" style="color: var(--mygreen);"></i>
                     <div>
-                        <strong>Tack för ditt meddelande!</strong>
+                        <strong>Tack för att du kontaktar oss </strong>
                         <p class="mb-0">{{ session('success') }}</p>
                     </div>
                 </div>
@@ -282,6 +282,23 @@
                             style="padding: 12px; border-radius: 8px;"
                         >{{ old('measurements') }}</textarea>
                         @error('measurements')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Suggested Visit Dates -->
+                    <div class="mb-4">
+                        <label for="visit_dates" class="form-label">Föreslå gärna tre datum och tider för att boka ett kostnadsfritt hembesök</label>
+                        <textarea
+                            class="form-control @error('visit_dates') is-invalid @enderror"
+                            id="visit_dates"
+                            name="visit_dates"
+                            rows="4"
+                            placeholder="Exempel:&#10;1. Måndag 27 januari kl. 10:00&#10;2. Tisdag 28 januari kl. 14:00&#10;3. Onsdag 29 januari kl. 09:00"
+                            style="padding: 12px; border-radius: 8px;"
+                        >{{ old('visit_dates') }}</textarea>
+                        <small class="text-muted">Föreslå tre olika datum och tider som passar dig</small>
+                        @error('visit_dates')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

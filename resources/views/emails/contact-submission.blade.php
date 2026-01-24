@@ -274,6 +274,14 @@
             </div>
         @endif
 
+        @if($submission->notes && str_contains($submission->notes, 'Föreslagna besökstider:'))
+            <div class="info-section">
+                <h2>📅 Föreslagna besökstider</h2>
+                <div class="message-box">
+                    {{ str_replace('Föreslagna besökstider:', '', $submission->notes) }}
+                </div>
+            </div>
+        @endif
         <!-- Attachments -->
         @if($submission->hasMedia('attachments'))
             <div class="info-section">
