@@ -65,13 +65,12 @@ class HomeController extends Controller
             'customer_type' => 'required|in:private,company',
             'help_needed' => 'required|string',
             'measurements' => 'nullable|string',
-//            'message' => 'nullable|string',
             'visit_dates' => 'nullable|string',
             'attachments' => 'nullable|array',
             'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'g-recaptcha-response' => 'required',
         ], [
-            'first_name.required' => 'Förnamn är obligatoriskt',
-            'last_name.required' => 'Efternamn är obligatoriskt',
+            'name.required' => 'Namn är obligatoriskt',
             'email.required' => 'E-post är obligatoriskt',
             'email.email' => 'Ogiltig e-postadress',
             'phone.required' => 'Telefonnummer är obligatoriskt',
@@ -82,11 +81,25 @@ class HomeController extends Controller
             'help_needed.required' => 'Vänligen berätta vad du behöver hjälp med',
             'attachments.*.mimes' => 'Endast JPG, PNG och PDF filer är tillåtna',
             'attachments.*.max' => 'Filen får inte vara större än 10MB',
+            'g-recaptcha-response.required' => 'Vänligen verifiera att du inte är en robot',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                              ->withErrors($validator)
+                             ->withInput();
+        }
+
+        // Verify reCAPTCHA
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
+
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$recaptchaSecret}&response={$recaptchaResponse}");
+        $responseKeys = json_decode($response, true);
+
+        if ( ! $responseKeys["success"]) {
+            return redirect()->back()
+                             ->withErrors(['g-recaptcha-response' => 'reCAPTCHA verifiering misslyckades. Vänligen försök igen.'])
                              ->withInput();
         }
 
@@ -100,7 +113,7 @@ class HomeController extends Controller
         if ($request->visit_dates) {
             $notes = "Föreslagna besökstider:\n".$request->visit_dates;
         }
-//        try {
+
         $submission = ContactSubmission::create([
             'first_name' => $firstName,
             'last_name' => $lastName,
@@ -112,7 +125,6 @@ class HomeController extends Controller
             'customer_type' => $request->customer_type,
             'help_needed' => $request->help_needed,
             'measurements' => $request->measurements,
-//                'message' => $request->message,
             'notes' => $notes,
             'status' => 'new',
         ]);
@@ -142,7 +154,6 @@ class HomeController extends Controller
         try {
             Mail::to(env('ADMIN_EMAIL', 'info@edensgrona.se'))
                 ->send(new ContactSubmissionMail($submission));
-
         } catch (\Exception $e) {
             Log::error('Failed to send admin email', [
                 'error' => $e->getMessage(),
@@ -154,7 +165,6 @@ class HomeController extends Controller
         try {
             Mail::to($submission->email)
                 ->send(new ContactConfirmationMail($submission));
-
         } catch (\Exception $e) {
             Log::error('Failed to send customer confirmation email', [
                 'error' => $e->getMessage(),
@@ -163,7 +173,6 @@ class HomeController extends Controller
         }
 
         return redirect()->back()->with('success', 'Vi återkommer så snart som möjligt');
-
     }
 
 

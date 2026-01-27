@@ -8,7 +8,8 @@
 
 @section('content')
     <!-- Simple Header matching website style -->
-    <div class="contact-header" style="background: linear-gradient(135deg, var(--mygreen) 0%, #388E3C 100%); padding: 60px 0;">
+    <div class="contact-header"
+         style="background: linear-gradient(135deg, var(--mygreen) 0%, #388E3C 100%); padding: 60px 0;">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-7">
@@ -288,7 +289,8 @@
 
                     <!-- Suggested Visit Dates -->
                     <div class="mb-4">
-                        <label for="visit_dates" class="form-label">Föreslå gärna tre datum och tider för att boka ett kostnadsfritt hembesök</label>
+                        <label for="visit_dates" class="form-label">Föreslå gärna tre datum och tider för att boka ett
+                                                                    kostnadsfritt hembesök</label>
                         <textarea
                             class="form-control @error('visit_dates') is-invalid @enderror"
                             id="visit_dates"
@@ -311,8 +313,9 @@
                             <div class="mb-3">
                                 <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--mygreen);"></i>
                             </div>
-                            <p class="mb-3" style="color: var(--mygreen); font-weight: 600;">Dra och släpp filer här eller
-                                                                                      klicka för att välja</p>
+                            <p class="mb-3" style="color: var(--mygreen); font-weight: 600;">Dra och släpp filer här
+                                                                                             eller
+                                                                                             klicka för att välja</p>
                             <input
                                 type="file"
                                 class="form-control @error('attachments.*') is-invalid @enderror"
@@ -329,6 +332,14 @@
                             @enderror
                         </div>
                         <div id="fileList" class="mt-3"></div>
+                    </div>
+
+                    <!-- reCAPTCHA v2 -->
+                    <div class="mb-4 d-flex justify-content-center">
+                        <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                        @error('g-recaptcha-response')
+                        <div class="text-danger mt-2 text-center w-100">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Submit Button -->
@@ -407,6 +418,9 @@
 @endpush
 
 @push('scripts')
+    <!-- Google reCAPTCHA v2 Script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script>
         // File upload preview
         document.getElementById('attachments').addEventListener('change', function (e) {
