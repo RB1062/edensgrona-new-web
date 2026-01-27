@@ -165,5 +165,16 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Vi återkommer så snart som möjligt');
 
     }
+
+
+    public function terms(GeneralSettings $generalSettings)
+    {
+        return view('terms', compact('generalSettings'));
+    }
+
+    public function privacy(GeneralSettings $generalSettings)
+    {
+        return view('privacy', compact('generalSettings'));
+    }
 }
 
