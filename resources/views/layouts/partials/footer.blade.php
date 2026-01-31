@@ -40,13 +40,14 @@
                     </a>
                 </div>
             </div>
+            <div class="text-center">
+                <a class="mr-5 text-white" href="{{ route('terms') }}">Villkor</a>
+                <br>
+                <a class="text-white" href="{{ route('privacy') }}">Integritetspolicy</a>
+            </div>
             <div class="mx-auto mt-6 d-none d-xs-none d-md-block"
                  style="max-width: 53rem; border-top: var(--whait) 1px solid;"></div>
             <span class="text-center small p-1" style="color: #ffffff7d;">
-                <div>
-                <a class="mr-3" href="{{ route('terms') }}">Villkor</a>
-                <a href="{{ route('privacy') }}">Integritetspolicy</a>
-                </div>
 
                 Integritetspolicy och Cookie Inställningar. © {{ date('Y') }}
                 <br>
