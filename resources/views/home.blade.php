@@ -47,9 +47,12 @@
                             <div class="hero-cta animate-fade-in-up" style="animation-delay: 0.3s;">
                                 <a href="{{$heroSettings->primary_button_url}}" class="btn-hero-primary">
                                     {{$heroSettings->primary_button_text}}
-                                    <i class="fas fa-arrow-right ms-2"></i>
+                                    @if(empty($heroSettings->primary_button_url))
+                                        <i class="fas fa-arrow-right ms-2"></i>
+                                    @endif
                                 </a>
-                                <a href="#services" class="btn-hero-secondary">
+                                <a href="{{$heroSettings->secondary_button_url??'#services'}}"
+                                   class="btn-hero-secondary">
                                     {{$heroSettings->secondary_button_text}}
                                     <i class="fas fa-chevron-down ms-2"></i>
                                 </a>
